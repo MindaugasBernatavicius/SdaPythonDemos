@@ -40,20 +40,20 @@
 #
 
 # 3. JSON
-import json
-
-with open("example.json") as in_file:
-    data = json.load(in_file)
-
-# ... from this point we are working with standard python objects
-print(data)
-print(type(data))
-print(data[0])
-print(data[0]['name'])
-
-# ... writing the same data
-with open("students.json", 'w') as out_file:
-    json.dump(data, out_file, indent=2)
+# import json
+#
+# with open("example.json") as in_file:
+#     data = json.load(in_file)
+#
+# # ... from this point we are working with standard python objects
+# print(data)
+# print(type(data))
+# print(data[0])
+# print(data[0]['name'])
+#
+# # ... writing the same data
+# with open("students.json", 'w') as out_file:
+#     json.dump(data, out_file, indent=2)
 
 
 # Homework / exercises:
@@ -76,15 +76,28 @@ with open("students.json", 'w') as out_file:
 # ... Additional features (implement if you want): change salary, increase salary by some percentage, add employees, etc.
 
 # 2. Create a simple script that will conver all csv files in a directory to json files (in the same or other directory).
+#
+# """
+# {
+# 	"employees": [{
+# 			"name": "Jonas"
+# 		},
+# 		{
+# 			"name": "Petras"
+# 		}
+# 	]
+# }
+# """
 
-"""
-{
-	"employees": [{
-			"name": "Jonas"
-		},
-		{
-			"name": "Petras"
-		}
-	]
-}
-"""
+
+
+# 3. Student homework
+# ... console scripts can be made very complex
+# ... one of my clients created a calculator game to
+# ... help his son learn arithmetic
+i = 7
+j = 5
+while True:
+    inp = input(f"What is the sum of numbers: {i} + {j}?\n")
+    if int(inp) == 12:
+        break
