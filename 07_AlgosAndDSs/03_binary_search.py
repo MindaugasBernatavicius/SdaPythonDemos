@@ -183,3 +183,29 @@ def binary_search_recursive(haystack, start, end, needle):
 # print(f'Sum of all loops taken: { sum(experiment_results) }')
 # print(f'Average time taken: { sum(experiment_results) / len(experiment_results) }')
 # print(f'Function results {function_results}')
+
+
+# Homework
+# - find_last(haystack, needle) --> given an array, find the last item that is the same as needle (pay attention to dublicates!)
+
+def find_last(haystack, needle):
+    for item in haystack[::-1]:
+        if item == needle:
+            last_item_index = len(haystack) - haystack[::-1].index(item) - 1
+            return f'The last {needle} in {haystack} is in {last_item_index} position'
+    return f'{needle} was not found in {haystack}'
+
+haystack_0 = [0, 1, 5, 100, 5]
+print(haystack_0[::-1])
+
+haystack_1 = [0, 1, 5, 100, 5]
+haystack_2 = [1, 1]
+haystack_3 = []
+haystack_4 = [-1, -2, -3, 6, 6, 5, -3]
+
+# testcases
+print(find_last(haystack_0, 5))
+print(find_last(haystack_1, 3))
+print(find_last(haystack_2, 1))
+print(find_last(haystack_3, 0))
+print(find_last(haystack_4, 6))
