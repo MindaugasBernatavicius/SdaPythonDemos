@@ -1,0 +1,25 @@
+{
+  "representation_minimal": [
+    [1, "chairs", 10, 5],
+    [2, "table", 5, 50]
+  ],
+  "representation_compact": [
+    ["id", "name", "weight", "length"],
+    [1, "chairs", 10, 5],
+    [2, "table", 5, 50]
+  ],
+  "representation_traditional_full": [
+    {
+      "id": 1,
+      "name": "chairs",
+      "weight": "10",
+      "length": "5"
+    },
+    {
+      "id": 2,
+      "name": "table",
+      "weight": "5",
+      "length": "50"
+    }
+  ]
+}

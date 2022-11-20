@@ -140,7 +140,7 @@ class Employee:
         return f"{{name: {self.name}, age: {self.age}}}"
 
     def __gt__(self, other): # >
-        if self.age > other.age:
+        if self.age > other.__age:
             return True
         else:
             return False
