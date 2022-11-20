@@ -118,3 +118,7 @@ print(sum(grades_list) / len(grades_list))
 # s1 = StudentReport("Max", "Dey", 8, 9)
 # s2 = StudentReport("John", "Grate", 10, 9)
 # s3 = StudentReport("John", "Grate", 9, 9)
+
+
+
+
