@@ -1,4 +1,47 @@
 # SRP - keep functions and classes simple i.e. with a single purpose
+# ... prefer many classes with dedicated purpose over one (god object antipattern).
+
+# Simple example
+# ... before SRP
+# class Game:
+#     def start_game(self): pass
+#     def player_move(self): pass
+#     def read_info_from_file(self): pass
+
+
+# ... after SRP
+class Game:
+    def start_game(self): pass
+
+class Player:
+    def move(self): pass
+
+class FileHandler:
+    def read_info_from_file(self): pass
+
+
+def process():
+    # read from file - extract data, compare
+    # with open('file.csv', 'w') as f:
+    #     pass
+    #     pass
+    #     pass
+    # data = get_data_fromfile()
+
+    # perform data cleaning
+    # perform data transformation
+    # send data to external service
+    # ... requests.post(url, data ... )
+    # save to database
+    with open('file.csv', 'w') as f:
+        pass
+        pass
+        pass
+    # send an emai about processing status (success / failure)
+
+
+# Another Example
+
 class PaymentTypeException(Exception):
     pass
 
@@ -57,18 +100,18 @@ class Order:
     #     return string[::-1]
 
 
-# class PaymentProcessor:
-#     def pay_credit(self, order_obj, security_code):
-#         print("Processing debit payment type")
-#         print(f"Verifying security code: {security_code}")
-#         # ...
-#         order_obj.status = "paid"
-#
-#     def pay_debit(self, order_obj, security_code):
-#         print("Processing debit payment type")
-#         print(f"Verifying security code: {security_code}")
-#         # ...
-#         order_obj.status = "paid"
+class PaymentProcessor:
+    def pay_credit(self, order_obj, security_code):
+        print("Processing debit payment type")
+        print(f"Verifying security code: {security_code}")
+        # ...
+        order_obj.status = "paid"
+
+    def pay_debit(self, order_obj, security_code):
+        print("Processing debit payment type")
+        print(f"Verifying security code: {security_code}")
+        # ...
+        order_obj.status = "paid"
 
     # def pay_paypal(self, order_obj, security_code):
     #     print("Processing debit payment type")
@@ -111,14 +154,87 @@ class PaypalPaymentProcessor(PaymentProcessor):
         # ...
         order_obj.status = "paid"
 
+
+# ... other examples
+class FileProcessor:
+    def process_csv(self): pass
+    def process_json(self): pass
+    def process_xml(self): pass
+
+class CsvProcessor: pass
+class JsonProcessor: pass
+class XmlProcessor: pass
+
+
 # LSP - parent classes should be interchangeable with child classes
+# ... add a new payment processor and observe that PaypalPaymentProcessor and CryptoPaymentProcessor
+# ... have different pay method than parent class: PaymentProcessor
+class CryptoPaymentProcessor(PaymentProcessor):
+    def pay(self, order_obj, wallet_id):
+        print("Processing debit payment type")
+        print(f"Verifying wallet: {wallet_id}")
+        # ...
+        order_obj.status = "paid"
+
+
+# ... to solve it, we move the verification logic and encapsulate it into objects
+class Verifyer(ABC):
+    @abstractmethod
+    def verify(self): pass
+
+
+class PayPalVerifyer(Verifyer):
+    def __init__(self, email):
+        self.__email = email
+
+    def verify(self):
+        print(f'Verifying email: {self.__email}')
+
+
+class PaymentProcessorEnhanced(ABC):
+    @abstractmethod
+    def pay(self, order_obj, verification_handler: Verifyer):
+        pass
+
+
+class CreditPaymentProcessorEnhanced(PaymentProcessorEnhanced):
+    def pay(self, order_obj, verification_handler):
+        print("Processing debit payment type")
+        verification_handler.verify()
+        # ...
+        order_obj.status = "paid"
+
 
 # ISP - your interfaces should be small
+class FileHandler(ABC):
+    @abstractmethod
+    def write(self): pass
+
+    @abstractmethod
+    def read(self): pass
+
+# ... situation: you want to read from one database and write to another.
+class FileReadHandler(ABC):
+    @abstractmethod
+    def read(self): pass
+
+    @abstractmethod
+    def read_with_timeout(self): pass
+
+class FileWriteHandler(ABC):
+    @abstractmethod
+    def write(self): pass
+
+    @abstractmethod
+    def append(self): pass
+
+
+
 
 # DIP - your code (your classes) should depend on abstract types, so that you could pass any concrete child type
 # class PaymentFlow:
-#     def __init__(self, payment_processor: CreditPaymentProcessor, order):
-#         payment_processor.pay(order, "")
+#     def __init__(self, payment_processor: CreditPaymentProcessor, order: Order, verifyer: Verifyer):
+#         payment_processor.pay(order, "", verifyer)
 
 class PaymentFlow:
     def __init__(self, payment_processor: PaymentProcessor, order): # payment_type
@@ -126,8 +242,13 @@ class PaymentFlow:
         #     payment_processor.pay_debit()
         payment_processor.pay(order, "")
 
+# ... we can see how well this principle relates to polymorphism
+PaymentFlow(PaypalPaymentProcessor(), Order())
+PaymentFlow(CreditPaymentProcessor(), Order())
+
 
 # ... another small example
+# ... DIP ties together many concepts: abstraction, inheritance, composition, dependency inversion ... dependency injection (will see latter)
 class Address(ABC):
     pass
 
